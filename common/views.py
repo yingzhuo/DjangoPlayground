@@ -31,12 +31,3 @@ def server_internal_error(request):
     :return: 应答
     """
     return render(request, '500.html', status=500)
-
-
-class MyBaseView(object):
-
-    def dispatch(self, request, *args, **kwargs):
-        print('before the http request')
-        ret = super(MyBaseView, self).dispatch(request, args, kwargs)
-        print('after the http request')
-        return ret
