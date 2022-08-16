@@ -1,0 +1,12 @@
+# 开发环境
+.idea/
+
+# python
+venv/
+db.sqlite3
+
+# 其他
+.DS_Store
+*.bak
+*.tmp
+*.temp
