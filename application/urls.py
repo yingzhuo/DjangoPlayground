@@ -1,5 +1,5 @@
 """
-settings URL Configuration
+配置URL映射
 """
 
 # namespace
