@@ -10,9 +10,8 @@ class API(object):
     error = None
     payload = dict()
 
-    def __int__(self, *, code=None, error=None, **kwargs):
-        code = code or CODE_OK
-        self.code = code
+    def __init__(self, *, code=None, error=None, **kwargs):
+        self.code = code or CODE_OK
         self.error = error
         self.payload = {k: v for k, v in kwargs.items()}
 
@@ -44,7 +43,7 @@ class APIResponse(JsonResponse):
 
     def __init__(
             self,
-            dict_or_api,
+            dict_or_api=API(),
             encoder=DjangoJSONEncoder,
             safe=True,
             json_dumps_params=None,

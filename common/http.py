@@ -7,6 +7,8 @@ from django.http import HttpRequest
 class HttpRequestDescriptor(object):
     """
     http请求描述器
+
+    本质上这是一个HttpRequest的装饰器
     """
 
     def __init__(self, request: HttpRequest):

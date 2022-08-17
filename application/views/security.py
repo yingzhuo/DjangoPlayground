@@ -20,21 +20,22 @@ class LoginView(APIView):
         password = request.GET.get('password', None)
 
         if not username or not password:
-            return APIResponse(API())
+            return APIResponse()
 
-        user = User.objects.filter(username=username, password=password)[0]
+        try:
+            user = User.objects.filter(username=username, password=password)[0]
+        except IndexError:
+            user = None
+
         if not user:
             raise BE_LOGIN_FAILED
 
-        token = rand.random_string()
-
-        user.current_token = token
+        user.current_token = rand.random_string()
         user.save()
 
-        api = API()
-        api.add({
-            'username': user.username,
-            'token': token,
-        })
+        api = API(
+            username=username,
+            token=user.current_token,
+        )
 
         return APIResponse(api)
