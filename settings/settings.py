@@ -50,6 +50,7 @@ REST_FRAMEWORK = {
     'UNAUTHENTICATED_TOKEN': None,
     'UNICODE_JSON': True,
     'COMPACT_JSON': False,
+    'EXCEPTION_HANDLER': 'common.exception.custom_exception_handler',
 }
 
 # 中间件

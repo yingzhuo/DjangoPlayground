@@ -3,6 +3,7 @@ from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
 
 from application.models import User
+from common.api import CODE_OK
 
 
 class CommonAuthenticator(BaseAuthentication):
@@ -17,7 +18,7 @@ class CommonAuthenticator(BaseAuthentication):
         token = request.headers.get('Authorization', None)
 
         if not token:
-            raise exceptions.AuthenticationFailed(detail='令牌缺失')
+            raise exceptions.AuthenticationFailed(code=CODE_OK, detail='令牌缺失')
 
         try:
             user = User.objects.filter(current_token=token)[0]
@@ -25,6 +26,6 @@ class CommonAuthenticator(BaseAuthentication):
             user = None
 
         if not user:
-            raise exceptions.AuthenticationFailed(detail='令牌错误')
+            raise exceptions.AuthenticationFailed(code=CODE_OK, detail='令牌错误')
 
         return user, token

@@ -2,7 +2,10 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 
 # 返回码 - OK
-CODE_OK = '10000'
+CODE_OK = '200'
+
+# 返回码 - 服务器内部错误
+CODE_SERVER_ERROR = '500'
 
 
 class API(object):

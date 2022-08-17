@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from application.models import User
 from common import rand
 from common.api import API, APIResponse
-from common.business_exception import BE_LOGIN_FAILED
+from common.exception import BE_LOGIN_FAILED, BusinessException
 
 
 class LoginView(APIView):
@@ -20,7 +20,7 @@ class LoginView(APIView):
         password = request.GET.get('password', None)
 
         if not username or not password:
-            return APIResponse()
+            raise BusinessException(code=400, detail='参数缺失')
 
         try:
             user = User.objects.filter(username=username, password=password)[0]
