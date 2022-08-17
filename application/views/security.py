@@ -39,3 +39,21 @@ class LoginView(APIView):
         )
 
         return APIResponse(api)
+
+
+class TokenInfoView(APIView):
+    """
+    检查Token信息
+
+    简单返回当前用户名和令牌字符串
+    """
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        token = request.auth
+
+        api = API(
+            username=user.username,
+            token=token,
+        )
+        return APIResponse(api)
