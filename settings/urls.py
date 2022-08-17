@@ -21,7 +21,3 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('application.urls')),
 ]
-
-# handler403 = 'common.views.access_denied'
-# handler404 = 'common.views.resource_not_found'
-# handler500 = 'common.views.server_internal_error'

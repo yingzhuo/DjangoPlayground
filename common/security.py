@@ -6,6 +6,7 @@ from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
 
 from application.dao.user import UserManager
+from application.models import User
 
 
 class CommonAuthenticator(BaseAuthentication):
@@ -33,8 +34,24 @@ class CommonAuthenticator(BaseAuthentication):
 class RoleUser(object):
     """
     用户角色
+
+    只要认证了，都赋予此角色
     """
 
     def has_permission(self, request, view):
         # 只要认证了，都赋予此角色
         return request.user is not None
+
+
+class RoleVIP(object):
+    """
+    VIP角色
+    """
+
+    def has_permission(self, request, view):
+        user = request.user
+
+        if not user or not isinstance(user, User):
+            return False
+
+        return 'ROLE_VIP' in user.role_list()

@@ -13,6 +13,7 @@ class LoginView(APIView):
 
     # 登录时不需要任何认证或授权
     authentication_classes = []
+    permission_classes = []
 
     def post(self, request, *args, **kwargs):
 
