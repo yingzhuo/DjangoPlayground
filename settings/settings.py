@@ -44,7 +44,10 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'common.security.CommonAuthenticator'
+        'common.security.CommonAuthenticator',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'common.security.RoleUser',
     ],
     'UNAUTHENTICATED_USER': lambda: None,
     'UNAUTHENTICATED_TOKEN': None,

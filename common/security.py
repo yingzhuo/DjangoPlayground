@@ -28,3 +28,13 @@ class CommonAuthenticator(BaseAuthentication):
             raise exceptions.AuthenticationFailed()
 
         return user, token
+
+
+class RoleUser(object):
+    """
+    用户角色
+    """
+
+    def has_permission(self, request, view):
+        # 只要认证了，都赋予此角色
+        return request.user is not None
