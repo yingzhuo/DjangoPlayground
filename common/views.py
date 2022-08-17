@@ -1,5 +1,7 @@
 """
 通用视图
+
+本文件已过时
 """
 from django.shortcuts import render
 

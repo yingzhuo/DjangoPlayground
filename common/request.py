@@ -1,5 +1,5 @@
 """
-http请求相关
+http请求相关工具等
 """
 from django.http import HttpRequest
 

@@ -1,27 +1,27 @@
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 
+# 返回码 - OK
+CODE_OK = '10000'
+
 
 class API(object):
-    code = '10000'
+    code = CODE_OK
     error = None
     payload = dict()
 
-    @classmethod
-    def new_instance(cls, *, code=None, error=None, **kwargs):
-        code = code or '10000'
-        api_result = API()
-        api_result.code = code
-        api_result.error = error
-        api_result.payload = {k: v for k, v in kwargs.items()}
-        return api_result
+    def __int__(self, *, code=None, error=None, **kwargs):
+        code = code or CODE_OK
+        self.code = code
+        self.error = error
+        self.payload = {k: v for k, v in kwargs.items()}
 
     def clean(self):
         for k, _ in self.payload.items():
             del self.payload[k]
 
     def add(self, data_dict):
-        if not isinstance(data_dict, (dict,)):
+        if not isinstance(data_dict, dict):
             raise TypeError('data_dict is not a dict')
 
         for k, v in data_dict.items():
@@ -35,6 +35,9 @@ class API(object):
         ret['error'] = self.error
         ret['payload'] = self.payload
         return ret
+
+    def __getitem__(self, item):
+        return self.payload[item]
 
 
 class APIResponse(JsonResponse):

@@ -8,7 +8,7 @@ from common.request import HttpRequestDescriptor
 
 class StdoutLoggingMiddleware(MiddlewareMixin):
     """
-    简易的请求日志记录器
+    请求日志记录器
     """
 
     def __int__(self, get_response):
