@@ -31,7 +31,9 @@ class HttpRequestDescriptor(object):
         return len(self.get_headers()) > 0
 
     def get_query_dict(self):
-        return self.request.GET if self.request.method == 'GET' else self.request.method == 'POST'
+        # return self.request.GET if self.request.method == 'GET' else self.request.POST
+        # TODO: 我还没有学明白为什么
+        return self.request.GET
 
     def has_ast_least_one_query_parameter(self):
         return len(self.get_query_dict()) > 0

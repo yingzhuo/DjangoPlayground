@@ -46,6 +46,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'common.security.CommonAuthenticator'
     ],
+    'UNAUTHENTICATED_USER': lambda: None,
+    'UNAUTHENTICATED_TOKEN': None,
     'UNICODE_JSON': True,
     'COMPACT_JSON': False,
 }
