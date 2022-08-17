@@ -1,3 +1,6 @@
+"""
+业务异常及全局异常处理模块
+"""
 from django.http import Http404
 from rest_framework import exceptions
 from rest_framework.exceptions import PermissionDenied
@@ -30,6 +33,10 @@ def custom_exception_handler(exc, context):
     if isinstance(exc, (Http404, exceptions.NotFound)):
         api.code = '404'
         api.error = '请求的资源未找到'
+
+    if isinstance(exc, exceptions.ValidationError):
+        api.code = '400'
+        api.error = '参数错误'
 
     elif isinstance(exc, exceptions.AuthenticationFailed):
         api.code = '401'

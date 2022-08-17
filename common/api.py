@@ -1,3 +1,6 @@
+"""
+API相关工具
+"""
 from django.core.serializers.json import DjangoJSONEncoder
 from django.http import JsonResponse
 
@@ -9,6 +12,9 @@ CODE_SERVER_ERROR = '500'
 
 
 class API(object):
+    """
+    本来用来限制所有接口返回JSON格式
+    """
     code = CODE_OK
     error = None
     payload = dict()

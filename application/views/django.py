@@ -15,6 +15,6 @@ class DjangoVersionView(APIView):
     def get(self, request, *args, **kwargs):
         api = API().add({
             'django_version': django.get_version(),
-            'django_restful_framework_version': rest_framework.__version__
+            'django_restful_framework_version': rest_framework.__version__,
         })
         return APIResponse(api)

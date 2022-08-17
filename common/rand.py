@@ -1,5 +1,5 @@
 """
-随机数或随机字符串生成工具
+随机数/字符串生成工具
 """
 import random
 import string

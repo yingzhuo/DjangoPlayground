@@ -1,9 +1,11 @@
+"""
+鉴权相关
+"""
 from django.http import HttpRequest
 from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
 
-from application.models import User
-from common.api import CODE_OK
+from application.dao.user import UserManager
 
 
 class CommonAuthenticator(BaseAuthentication):
@@ -18,14 +20,11 @@ class CommonAuthenticator(BaseAuthentication):
         token = request.headers.get('Authorization', None)
 
         if not token:
-            raise exceptions.AuthenticationFailed(code=CODE_OK, detail='令牌缺失')
+            raise exceptions.AuthenticationFailed()
 
-        try:
-            user = User.objects.filter(current_token=token)[0]
-        except IndexError:
-            user = None
+        user = UserManager.find_by_current_token(token)
 
         if not user:
-            raise exceptions.AuthenticationFailed(code=CODE_OK, detail='令牌错误')
+            raise exceptions.AuthenticationFailed()
 
         return user, token

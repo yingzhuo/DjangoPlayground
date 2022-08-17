@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 
-from application.models import User
+from application.dao.user import UserManager
 from common import rand
 from common.api import API, APIResponse
 from common.exception import BE_LOGIN_FAILED, BusinessException
@@ -22,10 +22,7 @@ class LoginView(APIView):
         if not username or not password:
             raise BusinessException(code=400, detail='参数缺失')
 
-        try:
-            user = User.objects.filter(username=username, password=password)[0]
-        except IndexError:
-            user = None
+        user = UserManager.find_by_username_and_password(username, password)
 
         if not user:
             raise BE_LOGIN_FAILED
