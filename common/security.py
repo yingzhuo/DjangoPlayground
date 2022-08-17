@@ -4,6 +4,7 @@
 from django.http import HttpRequest
 from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
+from rest_framework.permissions import BasePermission
 
 from application.dao.user import UserDao
 from application.models import User
@@ -31,7 +32,7 @@ class CommonAuthenticator(BaseAuthentication):
         return user, token
 
 
-class RoleUser(object):
+class RoleUser(BasePermission):
     """
     用户角色
 
@@ -43,7 +44,7 @@ class RoleUser(object):
         return request.user is not None
 
 
-class RoleVIP(object):
+class RoleVIP(BasePermission):
     """
     VIP角色
     """
@@ -57,7 +58,7 @@ class RoleVIP(object):
         return 'ROLE_VIP' in user.role_list()
 
 
-class RoleSVIP(object):
+class RoleSVIP(BasePermission):
     """
     SVIP角色
     """
