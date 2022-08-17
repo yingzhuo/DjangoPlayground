@@ -3,22 +3,46 @@
 """
 from django.utils.deprecation import MiddlewareMixin
 
-from common.request import HttpRequestDescriptor
+from common.http import HttpRequestDescriptor
 
 
-class StdoutLoggingMiddleware(MiddlewareMixin):
+class LoggingMiddleware(MiddlewareMixin):
     """
-    请求日志记录器
+    抽象请求日志记录中间件
     """
-
-    def __int__(self, get_response):
-        super().sync_capable = True
-        super().async_capable = False
-        super().__init__(get_response)
 
     def process_request(self, request):
-        descriptor = HttpRequestDescriptor(request)
-        print('-' * 100)
-        print(descriptor)
-        print('-' * 100)
+        if self.__getattribute__('do_log'):
+            do_log = self.__getattribute__('do_log')
+            do_log(HttpRequestDescriptor(request))
+
         return self.get_response(request)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+class StdoutLoggingMixin(object):
+    """
+    标准控制台请求日志特质
+    """
+
+    def do_log(self, request_descriptor):
+
+        if request_descriptor is None:
+            return
+
+        if not isinstance(request_descriptor, HttpRequestDescriptor):
+            raise TypeError('wrong type')
+
+        print('-' * 120)
+        print(request_descriptor)
+        print('-' * 120)
+
+
+class StdoutLoggingMiddleware(LoggingMiddleware, StdoutLoggingMixin):
+    """
+    请求日志记录中间件
+
+    此中间件输出日志到标准控制台
+    """
+    pass
