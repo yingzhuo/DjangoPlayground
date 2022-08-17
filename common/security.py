@@ -5,7 +5,7 @@ from django.http import HttpRequest
 from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
 
-from application.dao.user import UserManager
+from application.dao.user import UserDao
 from application.models import User
 
 
@@ -23,7 +23,7 @@ class CommonAuthenticator(BaseAuthentication):
         if not token:
             raise exceptions.AuthenticationFailed()
 
-        user = UserManager.find_by_current_token(token)
+        user = UserDao.find_by_current_token(token)
 
         if not user:
             raise exceptions.AuthenticationFailed()
@@ -55,3 +55,17 @@ class RoleVIP(object):
             return False
 
         return 'ROLE_VIP' in user.role_list()
+
+
+class RoleSVIP(object):
+    """
+    SVIP角色
+    """
+
+    def has_permission(self, request, view):
+        user = request.user
+
+        if not user or not isinstance(user, User):
+            return False
+
+        return 'ROLE_SVIP' in user.role_list()

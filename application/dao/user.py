@@ -4,7 +4,7 @@ User相关数据库存取
 from application.models import User
 
 
-class UserManager(object):
+class UserDao(object):
     """
     User相关数据库存取
     """
