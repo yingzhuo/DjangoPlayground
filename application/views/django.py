@@ -9,12 +9,16 @@ class DjangoVersionView(APIView):
     """
     Django版本相关信息
 
-    URL:  /django-version/
+    URL:  /v1/django-version/
     """
+
+    authentication_classes = []
+    permission_classes = []
 
     def get(self, request, *args, **kwargs):
         api = API().add({
             'django_version': django.get_version(),
-            'django_restful_framework_version': rest_framework.__version__,
+            'djangorestframework_version': rest_framework.__version__,
+            'api_version': request.version,
         })
         return APIResponse(api)

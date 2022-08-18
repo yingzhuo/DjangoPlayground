@@ -3,7 +3,7 @@
 """
 
 # namespace
-from django.urls import path
+from django.urls import re_path
 
 from application.views.django import DjangoVersionView
 from application.views.security import LoginView, TokenInfoView
@@ -12,7 +12,10 @@ app_name = 'application'
 
 # url映射
 urlpatterns = [
-    path('django-version/', DjangoVersionView.as_view()),
-    path('security/login/', LoginView.as_view()),
-    path('security/token/', TokenInfoView.as_view()),
+    # 版本查看页面
+    re_path(r'^(?P<version>v[0-9]+)/django-version/$', DjangoVersionView.as_view()),
+
+    # 登录
+    re_path(r'^(?P<version>v[0-9]+)/security/login/$', LoginView.as_view()),
+    re_path(r'^(?P<version>v[0-9]+)/security/token/$', TokenInfoView.as_view()),
 ]

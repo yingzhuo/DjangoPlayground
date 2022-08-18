@@ -9,6 +9,8 @@ from common.exception import BE_LOGIN_FAILED, BusinessException
 class LoginView(APIView):
     """
     处理登录请求
+
+    URL: /v1/security/login
     """
 
     # 登录时不需要任何认证或授权
@@ -44,14 +46,18 @@ class TokenInfoView(APIView):
     检查Token信息
 
     简单返回当前用户名和令牌字符串
+
+    URL: /v1/security/token
     """
 
     def get(self, request, *args, **kwargs):
         user = request.user
         token = request.auth
+        version = request.version
 
         api = API(
             username=user.username,
             token=token,
+            api_version=version,
         )
         return APIResponse(api)

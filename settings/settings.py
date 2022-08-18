@@ -43,20 +43,26 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
     ],
+    # 认证与授权
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'common.security.TokenBasedAuthenticator',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'common.security.RoleUser',
     ],
+    'UNAUTHENTICATED_USER': lambda: None,
+    'UNAUTHENTICATED_TOKEN': None,
+    # 限流
     'DEFAULT_THROTTLE_CLASSES': [
         'common.security.NullThrottle',
     ],
-    'UNAUTHENTICATED_USER': lambda: None,
-    'UNAUTHENTICATED_TOKEN': None,
+    # 版本号获取器
+    'DEFAULT_VERSIONING_CLASS': 'common.misc.Versioning',
+    # 错误处理
+    'EXCEPTION_HANDLER': 'common.exception.custom_exception_handler',
+    # 其他
     'UNICODE_JSON': True,
     'COMPACT_JSON': False,
-    'EXCEPTION_HANDLER': 'common.exception.custom_exception_handler',
 }
 
 # 中间件

@@ -1,5 +1,5 @@
 """
-鉴权相关
+鉴权相关组件
 """
 from django.http import HttpRequest
 from rest_framework import exceptions
