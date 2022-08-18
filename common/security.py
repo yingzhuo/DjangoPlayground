@@ -5,6 +5,7 @@ from django.http import HttpRequest
 from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.permissions import BasePermission
+from rest_framework.throttling import BaseThrottle
 
 from application.dao.user import UserDao
 from application.models import User
@@ -129,3 +130,16 @@ class RoleRoot(BasePermission):
             return False
 
         return user.id == 1
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+class NullThrottle(BaseThrottle):
+    """
+    请求限流器
+
+    本项目不启用限流功能
+    """
+
+    def allow_request(self, request, view):
+        return True

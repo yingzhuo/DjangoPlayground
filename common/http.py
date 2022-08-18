@@ -52,6 +52,12 @@ class HttpRequestDescriptor(object):
         for name, content in self.get_base_info().items():
             d.append("\t%s => %s" % (name, content))
 
+        # 元信息
+        d.append("Meta:")
+        for name, content in self.request.META.items():
+            if name.startswith('HTTP_') or name in ['REMOTE_ADDR']:
+                d.append("\t%s => %s" % (name, content))
+
         # 请求头
         if self.has_at_least_one_header():
             d.append("Headers:")

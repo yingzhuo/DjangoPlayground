@@ -49,6 +49,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'common.security.RoleUser',
     ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'common.security.NullThrottle',
+    ],
     'UNAUTHENTICATED_USER': lambda: None,
     'UNAUTHENTICATED_TOKEN': None,
     'UNICODE_JSON': True,
