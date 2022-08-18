@@ -1,7 +1,6 @@
 """
 http请求相关工具等
 """
-from django.http import HttpRequest
 
 
 class HttpRequestDescriptor(object):
@@ -11,7 +10,7 @@ class HttpRequestDescriptor(object):
     本质上这是一个HttpRequest的装饰器
     """
 
-    def __init__(self, request: HttpRequest):
+    def __init__(self, request):
         """
         构造方法
         :param request: 请求对象
@@ -29,16 +28,8 @@ class HttpRequestDescriptor(object):
     def get_headers(self):
         return {k: v for k, v in self.request.headers.items()}
 
-    def has_at_least_one_header(self):
-        return len(self.get_headers()) > 0
-
-    def get_query_dict(self):
-        # return self.request.GET if self.request.method == 'GET' else self.request.POST
-        # TODO: 我还没有学明白为什么
+    def get_query_params(self):
         return self.request.GET
-
-    def has_ast_least_one_query_parameter(self):
-        return len(self.get_query_dict()) > 0
 
     def get_detail(self):
         d = list()
@@ -59,15 +50,15 @@ class HttpRequestDescriptor(object):
                 d.append("\t%s => %s" % (name, content))
 
         # 请求头
-        if self.has_at_least_one_header():
+        if len(self.get_headers()) > 0:
             d.append("Headers:")
             for name, value in self.get_headers().items():
                 d.append("\t%s => %s" % (name, value))
 
         # query参数
-        if self.has_ast_least_one_query_parameter():
+        if len(self.get_query_params()):
             d.append("Query Dict:")
-            for k, v in self.get_query_dict().items():
+            for k, v in self.get_query_params().items():
                 d.append("\t%s => %s" % (k, v))
 
         return d
