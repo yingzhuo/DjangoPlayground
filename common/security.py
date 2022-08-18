@@ -63,7 +63,8 @@ class TokenBasedAuthenticator(BaseAuthentication, HeaderTokenResolver):
         token = resolve_token(request)
 
         if not token:
-            raise exceptions.AuthenticationFailed()
+            # 无法解析出令牌
+            return None
 
         user = UserDao.find_by_current_token(token)
 
@@ -114,3 +115,17 @@ class RoleSVIP(BasePermission):
             return False
 
         return 'ROLE_SVIP' in user.role_list()
+
+
+class RoleRoot(BasePermission):
+    """
+    ID等于1的用户为Root用户
+    """
+
+    def has_permission(self, request, view):
+        user = request.user
+
+        if not user or not isinstance(user, User):
+            return False
+
+        return user.id == 1
