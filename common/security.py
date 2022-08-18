@@ -10,16 +10,57 @@ from application.dao.user import UserDao
 from application.models import User
 
 
-class CommonAuthenticator(BaseAuthentication):
+class TokenResolver(object):
+    """
+    令牌解析器
+    """
+
+    def resolve_token(self, request):
+        """
+        从请求中获取令牌
+        :param request: 请求对象
+        :return: 令牌字符串或None
+        """
+        raise NotImplemented('abstract method')
+
+
+class HeaderTokenResolver(TokenResolver):
+    header_name = 'Authorization'
+    prefix = ''
+
+    def resolve_token(self, request):
+        header_value = request.headers.get(self.header_name, None)
+
+        if header_value is None or not header_value.startswith(self.prefix):
+            # 找不到此请求头或者值不以指定的前缀开始
+            return None
+        else:
+            # 返回令牌字符串
+            return header_value[len(self.prefix):]
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+
+class TokenBasedAuthenticator(BaseAuthentication, HeaderTokenResolver):
     """
     通用权限验证器
+
+    通过令牌找到用户对象
     """
 
     def authenticate(self, request):
         if isinstance(request, HttpRequest):
             return None
 
-        token = request.headers.get('Authorization', None)
+        # 尝试以反射的方式获取解析令牌的函数
+        resolve_token = self.__getattribute__('resolve_token')
+
+        if resolve_token is None:
+            # 没有混入特质则无法进一步工作
+            return None
+
+        token = resolve_token(request)
 
         if not token:
             raise exceptions.AuthenticationFailed()
@@ -30,6 +71,9 @@ class CommonAuthenticator(BaseAuthentication):
             raise exceptions.AuthenticationFailed()
 
         return user, token
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 class RoleUser(BasePermission):
