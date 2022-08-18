@@ -143,3 +143,11 @@ class NullThrottle(BaseThrottle):
 
     def allow_request(self, request, view):
         return True
+
+    def get_ident(self, request):
+        """
+        用户ID作为缓存的key
+        :param request: 请求对象
+        :return: 用户ID
+        """
+        return str(request.user.id)
