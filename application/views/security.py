@@ -3,12 +3,12 @@ from rest_framework.views import APIView
 
 from application.dao.user import UserDao
 from application.models import UserToken
-from common import rand
 from common.api import API, APIResponse
 from common.exception import BE_LOGIN_FAILED, BusinessException
+from common.misc import UUIDTokenGenerator
 
 
-class LoginView(APIView):
+class LoginView(APIView, UUIDTokenGenerator):
     """
     处理登录请求
 
@@ -32,7 +32,7 @@ class LoginView(APIView):
         if user is None:
             raise BE_LOGIN_FAILED
 
-        new_token = rand.uuid32()
+        new_token = self.generate_token(user)
 
         # 更新持久化的令牌
         if user.user_token is None:
