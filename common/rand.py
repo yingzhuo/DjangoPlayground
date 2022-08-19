@@ -3,6 +3,7 @@
 """
 import random
 import string
+import uuid
 
 ALL_ASCII = string.ascii_letters
 
@@ -15,3 +16,19 @@ def random_string(length=32, chars=ALL_ASCII):
     :return: 随机字符串
     """
     return ''.join(random.choice(chars) for _ in range(length))
+
+
+def uuid36():
+    """
+    获取36位UUID
+    :return: 36位UUID
+    """
+    return str(uuid.uuid4())
+
+
+def uuid32():
+    """
+    获取32位UUID
+    :return: 32位UUID
+    """
+    return uuid36().replace('-', '')

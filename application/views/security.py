@@ -32,7 +32,7 @@ class LoginView(APIView):
         if user is None:
             raise BE_LOGIN_FAILED
 
-        new_token = rand.random_string()
+        new_token = rand.uuid32()
 
         # 更新持久化的令牌
         if user.user_token is None:

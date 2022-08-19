@@ -96,6 +96,11 @@ class RoleVIP(BasePermission):
     """
 
     def has_permission(self, request, view):
+
+        # ROOT > SVIP > VIP
+        if RoleRoot().has_permission(request, view) or RoleSVIP().has_permission(request, view):
+            return True
+
         user = request.user
 
         if not user or not isinstance(user, User):
@@ -110,6 +115,10 @@ class RoleSVIP(BasePermission):
     """
 
     def has_permission(self, request, view):
+        # ROOT > SVIP
+        if RoleRoot().has_permission(request, view):
+            return True
+
         user = request.user
 
         if not user or not isinstance(user, User):
