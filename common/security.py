@@ -1,6 +1,8 @@
 """
 鉴权相关组件
 """
+import abc
+
 from django.http import HttpRequest
 from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
@@ -11,25 +13,26 @@ from application.dao.user import UserDao
 from application.models import User
 
 
-class TokenResolver(object):
+class AbstractTokenResolver(object, metaclass=abc.ABCMeta):
     """
     令牌解析器
     """
 
-    def resolve_token(self, request):
+    @abc.abstractmethod
+    def resolve_token(self, request, **kwargs):
         """
         从请求中获取令牌
         :param request: 请求对象
+        :param kwargs: 其他参数
         :return: 令牌字符串或None
         """
-        raise NotImplemented('abstract method')
 
 
-class HeaderTokenResolver(TokenResolver):
+class HeaderTokenResolver(AbstractTokenResolver):
     header_name = 'Authorization'
     prefix = ''
 
-    def resolve_token(self, request):
+    def resolve_token(self, request, **kwargs):
         header_value = request.headers.get(self.header_name, None)
 
         if header_value is None or not header_value.startswith(self.prefix):

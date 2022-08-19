@@ -1,7 +1,9 @@
+from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework.views import APIView
 
 from application.dao.user import UserDao
+from application.form.security import LoginFormSerializer
 from application.models import UserToken
 from common.api import API, APIResponse
 from common.exception import BE_LOGIN_FAILED, BusinessException
@@ -21,8 +23,16 @@ class LoginView(APIView, UUIDTokenGenerator):
 
     def post(self, request, *args, **kwargs):
 
-        username = request.GET.get('username', None)
-        password = request.GET.get('password', None)
+        ser = LoginFormSerializer(data=request.data)
+        if ser.is_valid(raise_exception=True):
+            username = ser.validated_data['username']
+            password = ser.validated_data['password']
+        else:
+            # TODO: 研究如何实现
+            return HttpResponse('NG')
+
+        # username = request.GET.get('username', None)
+        # password = request.GET.get('password', None)
 
         if not username or not password:
             raise BusinessException(code=400, detail='参数缺失')
