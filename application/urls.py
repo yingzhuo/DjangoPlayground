@@ -21,5 +21,5 @@ urlpatterns = [
     re_path(r'^(?P<version>v[0-9]+)/security/token/$', TokenInfoView.as_view()),
 
     # 用户
-    re_path(r'^(?P<version>v[0-9]+)/user/(?P<pk>[0-9]+)/$', FindUserByIdView.as_view()),
+    re_path(r'^(?P<version>v[0-9]+)/user/(?P<pk>\d+)/$', FindUserByIdView.as_view()),
 ]
