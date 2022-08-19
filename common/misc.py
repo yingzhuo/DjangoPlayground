@@ -9,10 +9,10 @@ import random
 import string
 import uuid
 
-from rest_framework.versioning import URLPathVersioning
+from rest_framework import versioning
 
 
-class Versioning(URLPathVersioning):
+class Versioning(versioning.URLPathVersioning):
     """
     版本号获取器
     """

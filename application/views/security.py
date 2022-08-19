@@ -14,7 +14,7 @@ class LoginView(APIView, UUIDTokenGenerator):
     """
     处理登录请求
 
-    URL: /v1/security/login
+    URL: /v1/security/login/
     """
 
     # 登录时不需要任何认证或授权
@@ -73,7 +73,7 @@ class TokenInfoView(APIView):
 
     简单返回当前用户名和令牌字符串
 
-    URL: /v1/security/token
+    URL: /v1/security/token/
     """
 
     def get(self, request, *args, **kwargs):

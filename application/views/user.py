@@ -9,6 +9,11 @@ from common.api import APIResponse
 
 
 class FindUserByIdView(APIView):
+    """
+    获取单个用户详情
+
+    URL: /v1/user/<userId>/
+    """
 
     def get(self, request, *args, **kwargs):
 
