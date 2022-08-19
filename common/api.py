@@ -52,12 +52,14 @@ class APIResponse(JsonResponse):
 
     def __init__(
             self,
-            dict_or_api=API(),
+            dict_or_api=None,
             encoder=DjangoJSONEncoder,
             safe=True,
             json_dumps_params=None,
             **kwargs,
     ):
+        dict_or_api = dict_or_api or API()
+
         if isinstance(dict_or_api, API):
             dict_or_api = dict_or_api.as_dict()
 
