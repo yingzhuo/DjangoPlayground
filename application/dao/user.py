@@ -1,7 +1,7 @@
 """
 User相关数据库存取
 """
-from application.models import User
+from application.models import User, UserToken
 
 
 class UserDao(object):
@@ -14,14 +14,15 @@ class UserDao(object):
         try:
             return User.objects.filter(username=username, password=password).first()
         except IndexError:
-            pass
+            return None
 
     @staticmethod
     def find_by_current_token(current_token):
         try:
-            return User.objects.filter(current_token=current_token).first()
+            user_token = UserToken.objects.filter(token_value=current_token).first()
+            return User.objects.filter(user_token=user_token).first()
         except IndexError:
-            pass
+            return None
 
     @staticmethod
     def find_by_id(pk):

@@ -101,7 +101,7 @@ class RoleVIP(BasePermission):
         if not user or not isinstance(user, User):
             return False
 
-        return 'ROLE_VIP' in user.role_list()
+        return 'ROLE_VIP' in user.role_list() or 'ROLE_SVIP' in user.role_list()
 
 
 class RoleSVIP(BasePermission):

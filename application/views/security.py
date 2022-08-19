@@ -1,6 +1,8 @@
+from django.utils import timezone
 from rest_framework.views import APIView
 
 from application.dao.user import UserDao
+from application.models import UserToken
 from common import rand
 from common.api import API, APIResponse
 from common.exception import BE_LOGIN_FAILED, BusinessException
@@ -27,15 +29,29 @@ class LoginView(APIView):
 
         user = UserDao.find_by_username_and_password(username, password)
 
-        if not user:
+        if user is None:
             raise BE_LOGIN_FAILED
 
-        user.current_token = rand.random_string()
+        new_token = rand.random_string()
+
+        # 更新持久化的令牌
+        if user.user_token is None:
+            # 第一次登录
+            user_token = UserToken(token_value=new_token, created_datetime=timezone.now())
+        else:
+            # 非第一登录
+            user_token = user.user_token
+            user_token.token_value = new_token
+            user_token.created_datetime = timezone.now()
+
+        user_token.save()
+
+        user.user_token = user_token
         user.save()
 
         api = API(
             username=username,
-            token=user.current_token,
+            token=new_token,
         )
 
         return APIResponse(api)
