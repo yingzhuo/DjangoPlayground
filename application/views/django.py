@@ -1,7 +1,9 @@
-import django
-from rest_framework.views import APIView
+import json
 
-from common.api import API, APIResponse
+import django
+import rest_framework
+from django.http import HttpResponse
+from rest_framework.views import APIView
 
 
 class DjangoVersionView(APIView):
@@ -15,8 +17,12 @@ class DjangoVersionView(APIView):
     permission_classes = []
 
     def get(self, request, *args, **kwargs):
-        api = API().add({
-            'django_version': django.get_version(),
-            'api_version': request.version,
-        })
-        return APIResponse(api)
+        ret = {
+            'django_core_version': django.get_version(),
+            'django_rest_version': rest_framework.VERSION
+        }
+
+        return HttpResponse(
+            json.dumps(ret, ensure_ascii=False),
+            content_type='application/json; charset=utf-8'
+        )

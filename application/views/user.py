@@ -1,11 +1,11 @@
 import json
 
 from django.http import HttpResponse
+from rest_framework import exceptions
 from rest_framework.views import APIView
 
 from application.dao.user import UserDao
 from application.models.user import UserSerializer
-from common.api import APIResponse
 
 
 class FindUserByIdView(APIView):
@@ -24,4 +24,4 @@ class FindUserByIdView(APIView):
             ret = json.dumps(ser.data, ensure_ascii=False)
             return HttpResponse(ret)
         else:
-            return APIResponse()
+            raise exceptions.NotFound()

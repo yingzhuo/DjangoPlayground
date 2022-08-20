@@ -1,3 +1,5 @@
+import json
+
 from django.http import HttpResponse
 from django.utils import timezone
 from rest_framework.views import APIView
@@ -5,8 +7,8 @@ from rest_framework.views import APIView
 from application.dao.user import UserDao
 from application.form.security import LoginFormSerializer
 from application.models import UserToken
-from common.api import API, APIResponse
-from common.exception import BE_LOGIN_FAILED, BusinessException
+from application.views.security_vo import UserWithTokenSerializer, UserWithToken
+from common.exception import BE_LOGIN_FAILED
 from common.misc import UUIDTokenGenerator
 
 
@@ -24,15 +26,9 @@ class LoginView(APIView, UUIDTokenGenerator):
     def post(self, request, *args, **kwargs):
 
         ser = LoginFormSerializer(data=request.data)
-        if ser.is_valid(raise_exception=True):
-            username = ser.validated_data['username']
-            password = ser.validated_data['password']
-        else:
-            # TODO: 研究如何实现
-            return HttpResponse('NG')
-
-        if not username or not password:
-            raise BusinessException(code=400, detail='参数缺失')
+        ser.is_valid(raise_exception=True)
+        username = ser.validated_data['username']
+        password = ser.validated_data['password']
 
         user = UserDao.find_by_username_and_password(username, password)
 
@@ -55,12 +51,9 @@ class LoginView(APIView, UUIDTokenGenerator):
         user.user_token = user_token
         user.save()
 
-        api = API(
-            username=username,
-            token=new_token,
-        )
-
-        return APIResponse(api)
+        uts = UserWithTokenSerializer(instance=UserWithToken(user=user, token=new_token))
+        ret = json.dumps(uts.data, ensure_ascii=False)
+        return HttpResponse(ret, content_type='application/json; charset=utf-8')
 
 
 class TokenInfoView(APIView):
@@ -77,9 +70,12 @@ class TokenInfoView(APIView):
         token = request.auth
         version = request.version
 
-        api = API(
-            username=user.username,
-            token=token,
-            api_version=version,
+        ret = json.dumps(
+            {
+                'username': user.username,
+                'token': token,
+                'api_version': version,
+            },
+            ensure_ascii=False,
         )
-        return APIResponse(api)
+        return HttpResponse(ret, content_type='application/json; charset=utf-8')
