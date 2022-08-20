@@ -61,7 +61,7 @@ REST_FRAMEWORK = {
     # 版本号获取器
     'DEFAULT_VERSIONING_CLASS': 'common.misc.Versioning',
     # 错误处理
-    # 'EXCEPTION_HANDLER': 'common.exception.custom_exception_handler',
+    'EXCEPTION_HANDLER': 'common.exception.custom_exception_handler',
     # 其他
     'UNICODE_JSON': True,
     'COMPACT_JSON': False,

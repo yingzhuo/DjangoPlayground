@@ -32,6 +32,6 @@ class UserWithTokenSerializer(serializers.Serializer):
         pass
 
     class Meta:
-        field = ['token']
+        pass
 
 # ----------------------------------------------------------------------------------------------------------------------
