@@ -22,6 +22,6 @@ class FindUserByIdView(APIView):
         if user:
             ser = UserSerializer(instance=user, many=False)
             ret = json.dumps(ser.data, ensure_ascii=False)
-            return HttpResponse(ret)
+            return HttpResponse(ret, content_type='application/json; charset=utf-8')
         else:
             raise exceptions.NotFound()
