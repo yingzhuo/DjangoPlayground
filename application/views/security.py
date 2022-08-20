@@ -31,9 +31,6 @@ class LoginView(APIView, UUIDTokenGenerator):
             # TODO: 研究如何实现
             return HttpResponse('NG')
 
-        # username = request.GET.get('username', None)
-        # password = request.GET.get('password', None)
-
         if not username or not password:
             raise BusinessException(code=400, detail='参数缺失')
 
@@ -55,7 +52,6 @@ class LoginView(APIView, UUIDTokenGenerator):
             user_token.created_datetime = timezone.now()
 
         user_token.save()
-
         user.user_token = user_token
         user.save()
 
