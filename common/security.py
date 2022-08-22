@@ -7,6 +7,7 @@ from django.http import HttpRequest
 from rest_framework import exceptions
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.permissions import BasePermission
+from rest_framework.request import Request
 from rest_framework.throttling import BaseThrottle
 
 from application.dao.user import UserDao
@@ -54,8 +55,10 @@ class TokenBasedAuthenticator(BaseAuthentication, HeaderTokenResolver):
     """
 
     def authenticate(self, request):
-        if isinstance(request, HttpRequest):
-            return None
+
+        # 检查类型 (其实没有必要)
+        if not isinstance(request, (HttpRequest, Request)):
+            raise TypeError('invalid request type')
 
         # 尝试以反射的方式获取解析令牌的函数
         resolve_token = self.__getattribute__('resolve_token')
@@ -76,6 +79,9 @@ class TokenBasedAuthenticator(BaseAuthentication, HeaderTokenResolver):
             raise exceptions.AuthenticationFailed()
 
         return user, token
+
+    def authenticate_header(self, request):
+        return '403 Permission Denied' if request.user else '401 Unauthenticated'
 
 
 # ----------------------------------------------------------------------------------------------------------------------

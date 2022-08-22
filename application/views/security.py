@@ -19,13 +19,20 @@ class LoginView(APIView, UUIDTokenGenerator):
     URL: /v1/security/login/
     """
 
-    # 登录时不需要任何认证或授权
+    # 登录时不需要任何认证
     authentication_classes = []
+
+    # 登录时不需要任何授权
     permission_classes = []
 
     def post(self, request, *args, **kwargs):
 
-        ser = LoginFormSerializer(data=request.data)
+        client_data = {
+            **request.GET,
+            **request.data,
+        }
+
+        ser = LoginFormSerializer(data=client_data)
         ser.is_valid(raise_exception=True)
         username = ser.validated_data['username']
         password = ser.validated_data['password']

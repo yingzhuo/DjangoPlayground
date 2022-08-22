@@ -107,9 +107,9 @@ WSGI_APPLICATION = 'settings.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DjangoPlayground',
         'HOST': '10.211.55.3',
         'PORT': 3306,
+        'NAME': 'DjangoPlayground',
         'USER': 'root',
         'PASSWORD': 'root',
     }
@@ -137,6 +137,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'zh-hans'
 TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
 
 # 静态资源
