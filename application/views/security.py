@@ -9,7 +9,7 @@ from application.form.security import LoginFormSerializer
 from application.models import UserToken
 from application.views.security_vo import UserWithTokenSerializer, UserWithToken
 from common.exception import BE_LOGIN_FAILED
-from django_sugar.web import token
+from django_sugar.web import token, http
 
 
 class LoginView(APIView, token.RandomUUIDTokenGenerator):
@@ -25,14 +25,12 @@ class LoginView(APIView, token.RandomUUIDTokenGenerator):
     # 登录时不需要任何授权
     permission_classes = []
 
+    # 生成UUID时生成32位长度的
     remove_uuid_hyphen = True
 
     def post(self, request, *args, **kwargs):
 
-        client_data = {
-            **request.GET,
-            **request.data,
-        }
+        client_data = http.get_client_sent_data(request)
 
         ser = LoginFormSerializer(data=client_data)
         ser.is_valid(raise_exception=True)
