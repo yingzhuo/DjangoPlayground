@@ -3,7 +3,7 @@
 """
 from django.utils.deprecation import MiddlewareMixin
 
-from common.http import HttpRequestDescriptor
+from django_sugar.web import http
 
 
 class LoggingMiddleware(MiddlewareMixin):
@@ -14,12 +14,13 @@ class LoggingMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if self.__getattribute__('do_log'):
             do_log = self.__getattribute__('do_log')
-            do_log(HttpRequestDescriptor(request))
+            do_log(http.HttpRequestDescriptor(request))
 
         return self.get_response(request)
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+
 
 class StdoutLoggingMixin(object):
     """
@@ -31,7 +32,7 @@ class StdoutLoggingMixin(object):
         if request_descriptor is None:
             return
 
-        if not isinstance(request_descriptor, HttpRequestDescriptor):
+        if not isinstance(request_descriptor, http.HttpRequestDescriptor):
             raise TypeError('wrong type')
 
         print('-' * 120)
@@ -39,7 +40,7 @@ class StdoutLoggingMixin(object):
         print('-' * 120)
 
 
-class StdoutLoggingMiddleware(LoggingMiddleware, StdoutLoggingMixin):
+class StdoutLoggingMiddleware(StdoutLoggingMixin, LoggingMiddleware, ):
     """
     请求日志记录中间件
 

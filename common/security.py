@@ -1,87 +1,17 @@
 """
 鉴权相关组件
 """
-import abc
-
-from django.http import HttpRequest
-from rest_framework import exceptions
-from rest_framework.authentication import BaseAuthentication
 from rest_framework.permissions import BasePermission
-from rest_framework.request import Request
 from rest_framework.throttling import BaseThrottle
 
 from application.dao.user import UserDao
 from application.models import User
+from django_sugar.web import auth, token
 
 
-class AbstractTokenResolver(object, metaclass=abc.ABCMeta):
-    """
-    令牌解析器
-    """
-
-    @abc.abstractmethod
-    def resolve_token(self, request, **kwargs):
-        """
-        从请求中获取令牌
-        :param request: 请求对象
-        :param kwargs: 其他参数
-        :return: 令牌字符串或None
-        """
-
-
-class HeaderTokenResolver(AbstractTokenResolver):
-    header_name = 'Authorization'
-    prefix = ''
-
-    def resolve_token(self, request, **kwargs):
-        header_value = request.headers.get(self.header_name, None)
-
-        if header_value is None or not header_value.startswith(self.prefix):
-            # 找不到此请求头或者值不以指定的前缀开始
-            return None
-        else:
-            # 返回令牌字符串
-            return header_value[len(self.prefix):]
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-
-class TokenBasedAuthenticator(BaseAuthentication, HeaderTokenResolver):
-    """
-    通用权限验证器
-
-    通过令牌找到用户对象
-    """
-
-    def authenticate(self, request):
-
-        # 检查类型 (其实没有必要)
-        if not isinstance(request, (HttpRequest, Request)):
-            raise TypeError('invalid request type')
-
-        # 尝试以反射的方式获取解析令牌的函数
-        resolve_token = self.__getattribute__('resolve_token')
-
-        if resolve_token is None:
-            # 没有混入特质则无法进一步工作
-            return None
-
-        token = resolve_token(request)
-
-        if not token:
-            # 无法解析出令牌
-            return None
-
-        user = UserDao.find_by_current_token(token)
-
-        if not user:
-            raise exceptions.AuthenticationFailed()
-
-        return user, token
-
-    def authenticate_header(self, request):
-        return '403 Permission Denied' if request.user else '401 Unauthenticated'
+class TokenBasedAuthenticator(auth.TokenBasedAuthenticator, token.HeaderTokenResolver, token.TokenBasedUserFinder):
+    def get_user_by_token(self, current_token, **kwargs):
+        return UserDao.find_by_current_token(current_token)
 
 
 # ----------------------------------------------------------------------------------------------------------------------

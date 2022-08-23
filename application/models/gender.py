@@ -1,9 +1,9 @@
 from enum import Enum
 
-from common.choosable import ChoiceMixin
+from django_sugar.lang import choices
 
 
-class Gender(ChoiceMixin, Enum):
+class Gender(choices.ChoicesType, Enum):
     """
     性别
     """
