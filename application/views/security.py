@@ -3,7 +3,7 @@ from datetime import datetime, timezone, timedelta
 from typing import Optional, Dict, Any
 
 from django.http import HttpResponse
-from django_sugar.web import http, token_jwt
+from django_sugar.web import http, token_jwt, pwdencoder
 from rest_framework.views import APIView
 
 from application.dao.user import UserDao
@@ -13,7 +13,7 @@ from common.constants import JWT_SECRET_KEY
 from common.exception import BE_LOGIN_FAILED
 
 
-class LoginView(APIView, token_jwt.HS256JWTTokenGenerator):
+class LoginView(APIView, token_jwt.HS256JWTTokenGenerator, pwdencoder.CompositePasswordEncoder):
     """
     处理登录请求
 
@@ -38,11 +38,14 @@ class LoginView(APIView, token_jwt.HS256JWTTokenGenerator):
         ser = LoginFormSerializer(data=client_data)
         ser.is_valid(raise_exception=True)
         username = ser.validated_data['username']
-        password = ser.validated_data['password']
+        raw_pass = ser.validated_data['password']
 
-        user = UserDao.find_by_username_and_password(username, password)
+        user = UserDao.find_by_username(username)
 
         if user is None:
+            raise BE_LOGIN_FAILED
+
+        if not self.password_matches(raw_pass, user.password):
             raise BE_LOGIN_FAILED
 
         jwt_token = self.generate_token(user)

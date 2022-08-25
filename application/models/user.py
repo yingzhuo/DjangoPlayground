@@ -12,8 +12,8 @@ class User(models.Model):
     """
     系统用户
     """
-    username = models.CharField(max_length=20, null=False, blank=False)
-    password = models.CharField(max_length=32, null=False, blank=False)
+    username = models.CharField(max_length=20, null=False, blank=False, unique=True)
+    password = models.CharField(max_length=2048, null=False, blank=False)
     email = models.CharField(max_length=100, null=True)
     roles = models.CharField(max_length=200, null=True, db_column='role_list')
     gender = models.CharField(choices=Gender.choices(), max_length=10, null=True, db_column='sex')

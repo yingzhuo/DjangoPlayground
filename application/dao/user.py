@@ -10,16 +10,12 @@ class UserDao(object):
     """
 
     @staticmethod
-    def find_by_username_and_password(username, password):
-        try:
-            return User.objects.filter(username=username, password=password).first()
-        except IndexError:
-            return None
+    def find_by_username(username):
+        return User.objects.filter(username=username).first()
 
     @staticmethod
     def find_by_id(pk):
         try:
-            user = User.objects.filter(id=pk).first()
-            return user
+            return User.objects.filter(id=pk).first()
         except IndexError:
             return None
