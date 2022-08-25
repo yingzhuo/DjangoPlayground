@@ -1,18 +1,19 @@
 import json
+from datetime import datetime, timezone, timedelta
+from typing import Optional, Dict, Any
 
 from django.http import HttpResponse
-from django.utils import timezone
+from django_sugar.web import http, token_jwt
 from rest_framework.views import APIView
 
 from application.dao.user import UserDao
 from application.form.security import LoginFormSerializer
-from application.models import UserToken
 from application.views.security_vo import UserWithTokenSerializer, UserWithToken
+from common.constants import JWT_SECRET_KEY
 from common.exception import BE_LOGIN_FAILED
-from django_sugar.web import token, http
 
 
-class LoginView(APIView, token.RandomUUIDTokenGenerator):
+class LoginView(APIView, token_jwt.HS256JWTTokenGenerator):
     """
     处理登录请求
 
@@ -28,8 +29,10 @@ class LoginView(APIView, token.RandomUUIDTokenGenerator):
     # 生成UUID时生成32位长度的
     remove_uuid_hyphen = True
 
-    def post(self, request, *args, **kwargs):
+    # JWT加密key
+    hs256_secret = JWT_SECRET_KEY
 
+    def post(self, request, *args, **kwargs):
         client_data = http.get_client_sent_data(request)
 
         ser = LoginFormSerializer(data=client_data)
@@ -42,25 +45,20 @@ class LoginView(APIView, token.RandomUUIDTokenGenerator):
         if user is None:
             raise BE_LOGIN_FAILED
 
-        new_token = self.generate_token(user)
+        jwt_token = self.generate_token(user)
 
-        # 更新持久化的令牌
-        if user.user_token is None:
-            # 第一次登录
-            user_token = UserToken(token_value=new_token, created_datetime=timezone.now())
-        else:
-            # 非第一登录
-            user_token = user.user_token
-            user_token.token_value = new_token
-            user_token.created_datetime = timezone.now()
-
-        user_token.save()
-        user.user_token = user_token
-        user.save()
-
-        uts = UserWithTokenSerializer(instance=UserWithToken(user=user, token=new_token))
+        uts = UserWithTokenSerializer(instance=UserWithToken(user=user, token=jwt_token))
         ret = json.dumps(uts.data, ensure_ascii=False)
         return HttpResponse(ret, content_type='application/json; charset=utf-8')
+
+    def user_to_jwt_payload(self, user) -> Optional[Dict[str, Any]]:
+        return {
+            'id': user.id,
+            'username': user.username,
+            'roles': user.roles,
+            'exp': datetime.now(tz=timezone.utc) + timedelta(days=1),
+            'nbf': datetime.now(tz=timezone.utc),
+        }
 
 
 class TokenInfoView(APIView):
@@ -79,7 +77,7 @@ class TokenInfoView(APIView):
 
         ret = json.dumps(
             {
-                'username': user.username,
+                'username': user['username'],
                 'token': tk,
                 'api_version': version,
             },

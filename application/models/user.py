@@ -12,7 +12,7 @@ class UserToken(models.Model):
     """
     用户登录令牌
     """
-    token_value = models.CharField(max_length=36, null=True, db_column='token_value')
+    token_value = models.CharField(max_length=2000, null=True, db_column='token_value')
     created_datetime = models.DateTimeField(null=False, db_column='created_time')
 
     class Meta:
