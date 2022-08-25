@@ -8,17 +8,6 @@ from rest_framework import serializers
 from application.models.gender import Gender
 
 
-class UserToken(models.Model):
-    """
-    用户登录令牌
-    """
-    token_value = models.CharField(max_length=2000, null=True, db_column='token_value')
-    created_datetime = models.DateTimeField(null=False, db_column='created_time')
-
-    class Meta:
-        db_table = 't_user_token'
-
-
 class User(models.Model):
     """
     系统用户
@@ -28,7 +17,6 @@ class User(models.Model):
     email = models.CharField(max_length=100, null=True)
     roles = models.CharField(max_length=200, null=True, db_column='role_list')
     gender = models.CharField(choices=Gender.choices(), max_length=10, null=True, db_column='sex')
-    user_token = models.OneToOneField(UserToken, null=True, on_delete=models.CASCADE, db_constraint=False)
     dob = models.DateField(null=True, db_column='date_of_birth')
 
     @property
@@ -49,5 +37,5 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        exclude = ['password', 'roles', 'user_token']
+        exclude = ['password', 'roles', ]
         depth = 0
