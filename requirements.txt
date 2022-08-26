@@ -1,7 +1,7 @@
 asgiref==3.5.2
 Django==4.1
-django-sugar @ git+https://github.com/yingzhuo/django-sugar.git@63940d5f77826e7b3f899eb05ee570e8dcd6a95b
+django-sugar @ git+https://github.com/yingzhuo/django-sugar.git@68965865e46ddd7339b5e5a41cf3c4553acc35b1
 djangorestframework==3.13.1
-mysqlclient==2.1.1
+PyMySQL==1.0.2
 pytz==2022.2.1
 sqlparse==0.4.2
