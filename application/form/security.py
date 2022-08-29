@@ -34,7 +34,9 @@ class LoginFormSerializer(serializers.Serializer):
         return password_value
 
     def update(self, instance, validated_data):
-        raise NotImplemented
+        # nop
+        return instance
 
     def create(self, validated_data):
-        raise NotImplemented
+        # nop
+        return None
