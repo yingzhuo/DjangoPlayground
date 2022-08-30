@@ -1,8 +1,17 @@
-import json
+r"""
+ ____  _                           ____  _                                             _
+|  _ \(_) __ _ _ __   __ _  ___   |  _ \| | __ _ _   _  __ _ _ __ ___  _   _ _ __   __| |
+| | | | |/ _` | '_ \ / _` |/ _ \  | |_) | |/ _` | | | |/ _` | '__/ _ \| | | | '_ \ / _` |
+| |_| | | (_| | | | | (_| | (_) | |  __/| | (_| | |_| | (_| | | | (_) | |_| | | | | (_| |
+|____// |\__,_|_| |_|\__, |\___/  |_|   |_|\__,_|\__, |\__, |_|  \___/ \__,_|_| |_|\__,_|
+    |__/             |___/                       |___/ |___/
 
+    https://github.com/yingzhuo/DjangoPlayground
+"""
 import django
+import django_sugar
 import rest_framework
-from django.http import HttpResponse
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 
@@ -17,12 +26,9 @@ class DjangoVersionView(APIView):
     permission_classes = []
 
     def get(self, request, *args, **kwargs):
-        ret = {
+        data = {
             'django_core_version': django.get_version(),
-            'django_rest_version': rest_framework.VERSION
+            'django_rest_version': rest_framework.VERSION,
+            'django_sugar_version': django_sugar.VERSION,
         }
-
-        return HttpResponse(
-            json.dumps(ret, ensure_ascii=False),
-            content_type='application/json; charset=utf-8'
-        )
+        return Response(data)

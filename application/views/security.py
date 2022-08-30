@@ -1,9 +1,18 @@
-import json
+r"""
+ ____  _                           ____  _                                             _
+|  _ \(_) __ _ _ __   __ _  ___   |  _ \| | __ _ _   _  __ _ _ __ ___  _   _ _ __   __| |
+| | | | |/ _` | '_ \ / _` |/ _ \  | |_) | |/ _` | | | |/ _` | '__/ _ \| | | | '_ \ / _` |
+| |_| | | (_| | | | | (_| | (_) | |  __/| | (_| | |_| | (_| | | | (_) | |_| | | | | (_| |
+|____// |\__,_|_| |_|\__, |\___/  |_|   |_|\__,_|\__, |\__, |_|  \___/ \__,_|_| |_|\__,_|
+    |__/             |___/                       |___/ |___/
+
+    https://github.com/yingzhuo/DjangoPlayground
+"""
 from datetime import datetime, timezone, timedelta
 from typing import Optional, Dict, Any
 
-from django.http import HttpResponse
 from django_sugar.web import http, token_jwt, pwdencoder
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from application.dao.user import UserDao
@@ -20,10 +29,8 @@ class LoginView(APIView, token_jwt.HS256JWTTokenGenerator, pwdencoder.CompositeP
     URL: /v1/security/login/
     """
 
-    # 登录时不需要任何认证
+    # 登录时不需要任何认证或授权
     authentication_classes = []
-
-    # 登录时不需要任何授权
     permission_classes = []
 
     # 生成UUID时生成32位长度的
@@ -51,8 +58,7 @@ class LoginView(APIView, token_jwt.HS256JWTTokenGenerator, pwdencoder.CompositeP
         jwt_token = self.generate_token(user)
 
         uts = UserWithTokenSerializer(instance=UserWithToken(user=user, token=jwt_token))
-        ret = json.dumps(uts.data, ensure_ascii=False)
-        return HttpResponse(ret, content_type='application/json; charset=utf-8')
+        return Response(data=uts.data)
 
     def user_to_jwt_payload(self, user) -> Optional[Dict[str, Any]]:
         return {
@@ -78,12 +84,9 @@ class TokenInfoView(APIView):
         tk = request.auth
         version = request.version
 
-        ret = json.dumps(
-            {
-                'username': user['username'],
-                'token': tk,
-                'api_version': version,
-            },
-            ensure_ascii=False,
-        )
-        return HttpResponse(ret, content_type='application/json; charset=utf-8')
+        ret = {
+            'username': user['username'],
+            'token': tk,
+            'api_version': version,
+        }
+        return Response(data=ret)

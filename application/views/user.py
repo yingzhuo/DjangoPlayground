@@ -1,7 +1,5 @@
-import json
-
-from django.http import HttpResponse
 from rest_framework import exceptions
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from application.dao.user import UserDao
@@ -21,7 +19,6 @@ class FindUserByIdView(APIView):
 
         if user:
             ser = UserSerializer(instance=user, many=False)
-            ret = json.dumps(ser.data, ensure_ascii=False)
-            return HttpResponse(ret, content_type='application/json; charset=utf-8')
+            return Response(data=ser.data)
         else:
             raise exceptions.NotFound()
