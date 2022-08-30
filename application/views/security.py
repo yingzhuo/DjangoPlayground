@@ -16,7 +16,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from application.dao.user import UserDao
-from application.form.security import LoginFormSerializer
+from application.views.security_form import LoginForm
 from application.views.security_vo import UserWithTokenSerializer, UserWithToken
 from common.constants import JWT_SECRET_KEY
 from common.exception import BE_LOGIN_FAILED
@@ -42,10 +42,10 @@ class LoginView(APIView, token_jwt.HS256JWTTokenGenerator, pwdencoder.CompositeP
     def post(self, request, *args, **kwargs):
         client_data = http.get_client_sent_data(request)
 
-        ser = LoginFormSerializer(data=client_data)
-        ser.is_valid(raise_exception=True)
-        username = ser.validated_data['username']
-        raw_pass = ser.validated_data['password']
+        form = LoginForm(data=client_data)
+        form.is_valid(raise_exception=True)
+        username = form.validated_data['username']
+        raw_pass = form.validated_data['password']
 
         user = UserDao.find_by_username(username)
 

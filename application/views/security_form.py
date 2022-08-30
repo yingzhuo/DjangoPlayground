@@ -8,18 +8,8 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
-from application.form.mixin import *
+from application.form import *
 
 
-class LoginFormSerializer(UsernameMixin, PasswordMixin):
-    """
-    登录上行数据序列化器
-    """
-
-    def update(self, instance, validated_data):
-        # nop
-        return instance
-
-    def create(self, validated_data):
-        # nop
-        return None
+class LoginForm(UsernameMixin, PasswordMixin):
+    pass

@@ -8,3 +8,4 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
+from .mixin import *

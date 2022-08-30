@@ -42,6 +42,9 @@ class PasswordMixin(serializers.Serializer):
         required=True,
         min_length=6,
         max_length=16,
+        must_contains_lower_case_letter=False,
+        must_contains_upper_case_letter=False,
+        must_contains_special_character_letter=False,
     )
 
     def update(self, instance, validated_data):
