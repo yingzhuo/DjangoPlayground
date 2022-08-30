@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -19,7 +18,8 @@ class Migration(migrations.Migration):
                 ('password', models.CharField(max_length=2048)),
                 ('email', models.CharField(max_length=100, null=True)),
                 ('roles', models.CharField(db_column='role_list', max_length=200, null=True)),
-                ('gender', models.CharField(choices=[('FEMALE', 0), ('MALE', 1)], db_column='sex', max_length=10, null=True)),
+                ('gender',
+                 models.CharField(choices=[('FEMALE', 0), ('MALE', 1)], db_column='sex', max_length=10, null=True)),
                 ('dob', models.DateField(db_column='date_of_birth', null=True)),
             ],
             options={
