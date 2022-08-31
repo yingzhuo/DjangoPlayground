@@ -71,6 +71,7 @@ REST_FRAMEWORK = {
 
 # 中间件
 MIDDLEWARE = [
+    'common.middleware.SpiderDenyingMiddleware',
     'common.middleware.StdoutLoggingMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

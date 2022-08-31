@@ -1,9 +1,40 @@
-"""
-中间件
-"""
-from django.utils.deprecation import MiddlewareMixin
+r"""
+ ____  _                           ____  _                                             _
+|  _ \(_) __ _ _ __   __ _  ___   |  _ \| | __ _ _   _  __ _ _ __ ___  _   _ _ __   __| |
+| | | | |/ _` | '_ \ / _` |/ _ \  | |_) | |/ _` | | | |/ _` | '__/ _ \| | | | '_ \ / _` |
+| |_| | | (_| | | | | (_| | (_) | |  __/| | (_| | |_| | (_| | | | (_) | |_| | | | | (_| |
+|____// |\__,_|_| |_|\__, |\___/  |_|   |_|\__,_|\__, |\__, |_|  \___/ \__,_|_| |_|\__,_|
+    |__/             |___/                       |___/ |___/
 
+    https://github.com/yingzhuo/DjangoPlayground
+"""
+import re
+
+from django.http import HttpResponse
+from django.utils.deprecation import MiddlewareMixin
 from django_sugar.web import http
+from rest_framework import status
+
+
+class SpiderDenyingMiddleware(MiddlewareMixin):
+    """
+    拒绝蜘蛛用的Middleware
+    """
+
+    def process_request(self, request):
+        user_agent = request.headers.get('User-Agent', None)
+        if not user_agent:
+            return self.get_response(request)
+
+        regex = r"qihoobot|Baiduspider|Googlebot|Googlebot-Mobile|Googlebot-Image|Mediapartners-Google|" \
+                r"Adsbot-Google|Feedfetcher-Google|Yahoo! Slurp|Yahoo! Slurp China|YoudaoBot|Sosospider|" \
+                r"Sogou spider|Sogou web spider|MSNBot|ia_archiver|Tomato Bot"
+
+        maybe_spider = bool(re.search(regex, user_agent))
+        if maybe_spider:
+            return HttpResponse("You're not welcome.", status=status.HTTP_403_FORBIDDEN)
+        else:
+            return self.get_response(request)
 
 
 class LoggingMiddleware(MiddlewareMixin):
