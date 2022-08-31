@@ -11,6 +11,7 @@ r"""
 from datetime import datetime, timezone, timedelta
 from typing import Optional, Dict, Any
 
+from django_sugar.lang import uuid
 from django_sugar.web import http, token_jwt, pwdencoder
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -22,7 +23,7 @@ from common.constants import JWT_SECRET_KEY
 from common.exception import BE_LOGIN_FAILED
 
 
-class LoginView(APIView, token_jwt.HS256JWTTokenGenerator, pwdencoder.CompositePasswordEncoder):
+class LoginView(APIView, token_jwt.JwtTokenGenerator, pwdencoder.CompositePasswordEncoder):
     """
     处理登录请求
 
@@ -37,7 +38,7 @@ class LoginView(APIView, token_jwt.HS256JWTTokenGenerator, pwdencoder.CompositeP
     remove_uuid_hyphen = True
 
     # JWT加密key
-    hs256_secret = JWT_SECRET_KEY
+    jwt_algorithm_and_key = JWT_SECRET_KEY
 
     def post(self, request, *args, **kwargs):
         client_data = http.get_client_sent_data(request)
@@ -67,6 +68,7 @@ class LoginView(APIView, token_jwt.HS256JWTTokenGenerator, pwdencoder.CompositeP
             'roles': user.roles,
             'exp': datetime.now(tz=timezone.utc) + timedelta(days=1),
             'nbf': datetime.now(tz=timezone.utc),
+            'noice': uuid.random_uuid(),
         }
 
 

@@ -1,2 +1,4 @@
 # JWT签名KEY
-JWT_SECRET_KEY = 'DjangoPlayground' * 2
+from django_sugar.web import jwtalg
+
+JWT_SECRET_KEY = jwtalg.HmacAlgorithm('HS384', key='DjangoPlayground')

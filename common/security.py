@@ -9,10 +9,13 @@ from common.constants import JWT_SECRET_KEY
 
 
 class TokenBasedAuthenticator(auth.TokenBasedAuthenticator,
-                              token_jwt.JWTTokenParser,
-                              token_jwt.HS256JWTTokenBasedUserFinder):
+                              token_jwt.JwtTokenParser,
+                              token_jwt.JwtTokenBasedUserFinder):
     # JWT加密key
-    hs256_secret = JWT_SECRET_KEY
+    jwt_algorithm_and_key = JWT_SECRET_KEY
+
+    def convert_user(self, user_dict):
+        return user_dict
 
 
 # ----------------------------------------------------------------------------------------------------------------------
