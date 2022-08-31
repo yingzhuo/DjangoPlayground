@@ -8,7 +8,7 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
-from django_sugar.web import jwtalg
+from django_sugar import web
 
 # JWT签名公钥
 _RSA_PUBLIC = """
@@ -60,8 +60,8 @@ Wv76+swBZv/Tp1Hg18nKMm7DjpAHNap1Jg97XeMeemXsxjRtt/VQATo42GnH54lH
 # JWT签名私钥密码
 _RSA_PRIVATE_PASSPHRASE = 'DjangoPlayground'
 
-JWT_SECRET_KEY = jwtalg.RsaAlgorithm('RS256',
-                                     public_key=_RSA_PUBLIC,
-                                     private_key=_RSA_PRIVATE,
-                                     passphrase=_RSA_PRIVATE_PASSPHRASE
-                                     )
+JWT_SECRET_KEY = web.RsaAlgorithm('RS256',
+                                  public_key=_RSA_PUBLIC,
+                                  private_key=_RSA_PRIVATE,
+                                  passphrase=_RSA_PRIVATE_PASSPHRASE
+                                  )

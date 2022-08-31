@@ -8,16 +8,16 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
-from django_sugar.web import auth, token_jwt
+from django_sugar import web
 from rest_framework.permissions import BasePermission
 from rest_framework.throttling import BaseThrottle
 
 from common.constants import JWT_SECRET_KEY
 
 
-class TokenBasedAuthenticator(auth.TokenBasedAuthenticator,
-                              token_jwt.JwtTokenParser,
-                              token_jwt.JwtTokenBasedUserFinder):
+class TokenBasedAuthenticator(web.TokenBasedAuthenticator,
+                              web.JwtTokenParser,
+                              web.JwtTokenBasedUserFinder):
     # JWT加密key
     jwt_algorithm_and_key = JWT_SECRET_KEY
 

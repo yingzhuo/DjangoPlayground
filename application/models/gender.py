@@ -10,10 +10,10 @@ r"""
 """
 from enum import Enum
 
-from django_sugar.lang import choices
+from django_sugar import lang
 
 
-class Gender(choices.ChoicesType, Enum):
+class Gender(lang.ChoicesType, Enum):
     """
     性别
     """

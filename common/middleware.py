@@ -11,12 +11,12 @@ r"""
 import re
 
 from django.http import HttpResponse
-from django.utils.deprecation import MiddlewareMixin
-from django_sugar.web import http
+from django.utils import deprecation
+from django_sugar import web
 from rest_framework import status
 
 
-class SpiderDenyingMiddleware(MiddlewareMixin):
+class SpiderDenyingMiddleware(deprecation.MiddlewareMixin):
     """
     拒绝蜘蛛用的Middleware
     """
@@ -37,7 +37,7 @@ class SpiderDenyingMiddleware(MiddlewareMixin):
             return self.get_response(request)
 
 
-class LoggingMiddleware(MiddlewareMixin):
+class LoggingMiddleware(deprecation.MiddlewareMixin):
     """
     抽象请求日志记录中间件
     """
@@ -45,7 +45,7 @@ class LoggingMiddleware(MiddlewareMixin):
     def process_request(self, request):
         if self.__getattribute__('do_log'):
             do_log = self.__getattribute__('do_log')
-            do_log(http.HttpRequestDescriptor(request))
+            do_log(web.HttpRequestDescriptor(request))
 
         return self.get_response(request)
 
@@ -63,7 +63,7 @@ class StdoutLoggingMixin(object):
         if request_descriptor is None:
             return
 
-        if not isinstance(request_descriptor, http.HttpRequestDescriptor):
+        if not isinstance(request_descriptor, web.HttpRequestDescriptor):
             raise TypeError('wrong type')
 
         print('-' * 120)
