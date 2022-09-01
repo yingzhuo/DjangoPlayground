@@ -33,5 +33,4 @@ def custom_exception_handler(exc, context):
     # args = context.get('args')
     # kwargs = context.get('kwargs')
     # request = context.get('request')
-    print(type(exc))
     return views.exception_handler(exc, context)

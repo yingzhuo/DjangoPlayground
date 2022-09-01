@@ -33,9 +33,6 @@ class LoginView(APIView, web.JwtTokenGenerator, web.CompositePasswordEncoder):
     authentication_classes = []
     permission_classes = []
 
-    # 生成UUID时生成32位长度的
-    remove_uuid_hyphen = True
-
     # JWT加密key
     jwt_algorithm_and_key = JWT_SECRET_KEY
 
