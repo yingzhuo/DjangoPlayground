@@ -16,12 +16,14 @@ from common.constants import JWT_SECRET_KEY
 
 
 class TokenBasedAuthenticator(web.TokenBasedAuthenticator,
-                              web.JwtTokenParser,
+                              web.CompositeTokenResolver,
                               web.JwtTokenBasedUserFinder):
     # JWT加密key
     jwt_algorithm_and_key = JWT_SECRET_KEY
 
-    def convert_user(self, user_dict):
+    @staticmethod
+    def convert_user(user_dict):
+        # 可以从用户字典转换到其他实体
         return user_dict
 
 

@@ -13,6 +13,7 @@ r"""
 from django.urls import re_path
 
 from application.views.django import DjangoVersionView
+from application.views.fileupload import FileUploadView
 from application.views.security import LoginView, TokenInfoView
 from application.views.user import FindUserByIdView
 
@@ -22,6 +23,9 @@ app_name = 'application'
 urlpatterns = [
     # 版本查看页面
     re_path(r'^(?P<version>v[0-9]+)/django-version/$', DjangoVersionView.as_view()),
+
+    # 通用文件上传接口
+    re_path(r'^(?P<version>v[0-9]+)/file-upload/$', FileUploadView.as_view()),
 
     # 登录
     re_path(r'^(?P<version>v[0-9]+)/security/login/$', LoginView.as_view()),
