@@ -60,8 +60,8 @@ Wv76+swBZv/Tp1Hg18nKMm7DjpAHNap1Jg97XeMeemXsxjRtt/VQATo42GnH54lH
 # JWT签名私钥密码
 _RSA_PRIVATE_PASSPHRASE = 'DjangoPlayground'
 
-JWT_SECRET_KEY = web.RsaAlgorithm('RS256',
+# JWT签名算法密钥与KEY
+JWT_SECRET_KEY = web.RsaAlgorithm('PS384',
                                   public_key=_RSA_PUBLIC,
                                   private_key=_RSA_PRIVATE,
-                                  passphrase=_RSA_PRIVATE_PASSPHRASE
-                                  )
+                                  passphrase=_RSA_PRIVATE_PASSPHRASE)

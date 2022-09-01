@@ -8,4 +8,5 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
+from .gender import Gender
 from .user import User
