@@ -22,7 +22,7 @@ from common.constants import JWT_SECRET_KEY
 from common.exception import BE_LOGIN_FAILED
 
 
-class LoginView(APIView, web.JwtTokenGenerator, web.CompositePasswordEncoder):
+class LoginView(APIView, web.JwtTokenGenerator, web.DelegatingPasswordEncoder):
     """
     处理登录请求
 
