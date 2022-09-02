@@ -18,8 +18,7 @@ from rest_framework.views import APIView
 from application.dao.user import UserDao
 from application.views.security_form import LoginForm
 from application.views.security_vo import UserWithTokenSerializer, UserWithToken
-from common.constants import JWT_SECRET_KEY
-from common.exception import BE_LOGIN_FAILED
+from common import security, exception
 
 
 class LoginView(APIView, web.JwtTokenGenerator, web.DelegatingPasswordEncoder):
@@ -34,7 +33,7 @@ class LoginView(APIView, web.JwtTokenGenerator, web.DelegatingPasswordEncoder):
     permission_classes = []
 
     # JWT加密key
-    jwt_algorithm_and_key = JWT_SECRET_KEY
+    jwt_algorithm_and_key = security.JWT_SECRET_KEY
 
     def post(self, request, *args, **kwargs):
         client_data = web.get_client_sent_data(request)
@@ -47,10 +46,10 @@ class LoginView(APIView, web.JwtTokenGenerator, web.DelegatingPasswordEncoder):
         user = UserDao.find_by_username(username)
 
         if user is None:
-            raise BE_LOGIN_FAILED
+            raise exception.BE_LOGIN_FAILED
 
         if not self.password_matches(raw_pass, user.password):
-            raise BE_LOGIN_FAILED
+            raise exception.BE_LOGIN_FAILED
 
         jwt_token = self.generate_token(user)
 

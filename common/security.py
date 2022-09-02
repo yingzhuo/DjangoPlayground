@@ -8,17 +8,26 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
-from django_sugar import web
+from pathlib import Path
+
+from django_sugar import web, lang
 from rest_framework import permissions, throttling
 
-from common import constants
+JWT_SECRET_KEY = web.RsaAlgorithm('PS384',
+                                  public_key=lang.read_file_as_bytes(Path(__file__).parent / 'rsa.public'),
+                                  private_key=lang.read_file_as_bytes(Path(__file__).parent / 'rsa.private'),
+                                  passphrase=b'DjangoPlayground'
+                                  )
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 
 
 class TokenBasedAuthenticator(web.TokenBasedAuthenticator,
                               web.CompositeTokenResolver,
                               web.JwtTokenBasedUserFinder):
     # JWT加密key
-    jwt_algorithm_and_key = constants.JWT_SECRET_KEY
+    jwt_algorithm_and_key = JWT_SECRET_KEY
 
     @staticmethod
     def convert_user(user_dict):
