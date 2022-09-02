@@ -9,17 +9,16 @@ r"""
     https://github.com/yingzhuo/DjangoPlayground
 """
 from django_sugar import web
-from rest_framework.permissions import BasePermission
-from rest_framework.throttling import BaseThrottle
+from rest_framework import permissions, throttling
 
-from common.constants import JWT_SECRET_KEY
+from common import constants
 
 
 class TokenBasedAuthenticator(web.TokenBasedAuthenticator,
                               web.CompositeTokenResolver,
                               web.JwtTokenBasedUserFinder):
     # JWT加密key
-    jwt_algorithm_and_key = JWT_SECRET_KEY
+    jwt_algorithm_and_key = constants.JWT_SECRET_KEY
 
     @staticmethod
     def convert_user(user_dict):
@@ -30,7 +29,7 @@ class TokenBasedAuthenticator(web.TokenBasedAuthenticator,
 # ----------------------------------------------------------------------------------------------------------------------
 
 
-class RoleUser(BasePermission):
+class RoleUser(permissions.BasePermission):
     """
     用户角色
 
@@ -44,7 +43,7 @@ class RoleUser(BasePermission):
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-class NullThrottle(BaseThrottle):
+class NullThrottle(throttling.BaseThrottle):
     """
     请求限流器
 
