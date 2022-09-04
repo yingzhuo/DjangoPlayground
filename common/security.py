@@ -62,6 +62,26 @@ JWT_SECRET_KEY = web.create_rs384_algorithm(
 
 # ----------------------------------------------------------------------------------------------------------------------
 
+def get_current_user_id(request):
+    if request:
+        try:
+            return request.user['id']
+        except (AttributeError, TypeError, ValueError,):
+            return -1
+    return -1
+
+
+def get_current_user_username(request):
+    if request:
+        try:
+            return request.user['username']
+        except (AttributeError, TypeError, ValueError,):
+            return '(Unknown)'
+    return '(Unknown)'
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+
 
 class TokenBasedAuthenticator(web.TokenBasedAuthenticator,
                               web.CompositeTokenResolver,

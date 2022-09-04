@@ -14,7 +14,7 @@ from rest_framework.response import Response
 
 from application.models import FileMeta, FileMetaSerializer
 from application.views.fileupload_form import CommonFileUploadForm
-from common import constants
+from common import constants, security
 
 
 class FileUploadView(views.APIView):
@@ -23,7 +23,7 @@ class FileUploadView(views.APIView):
     parser_classes = [parsers.MultiPartParser]
 
     def post(self, request, *args, **kwargs):
-        # current_user_id = request.user['id']
+        current_user_id = security.get_current_user_id(request)
 
         form = CommonFileUploadForm(data=request.data)
         form.is_valid(raise_exception=True)
@@ -38,7 +38,7 @@ class FileUploadView(views.APIView):
         filemeta = FileMeta()
         filemeta.path = path
         filemeta.created_date = timezone.now()
-        filemeta.created_user_id = -1
+        filemeta.created_user_id = current_user_id
         filemeta.save()
 
         ser = FileMetaSerializer(instance=filemeta, many=False)

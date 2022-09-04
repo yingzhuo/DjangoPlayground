@@ -8,8 +8,6 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
-import re
-
 from django.http import HttpResponse
 from django.utils import deprecation
 from django_sugar import web
@@ -22,15 +20,7 @@ class SpiderDenyingMiddleware(deprecation.MiddlewareMixin):
     """
 
     def process_request(self, request):
-        user_agent = request.headers.get('User-Agent', None)
-        if not user_agent:
-            return self.get_response(request)
-
-        regex = r"qihoobot|Baiduspider|Googlebot|Googlebot-Mobile|Googlebot-Image|Mediapartners-Google|" \
-                r"Adsbot-Google|Feedfetcher-Google|Yahoo! Slurp|Yahoo! Slurp China|YoudaoBot|Sosospider|" \
-                r"Sogou spider|Sogou web spider|MSNBot|ia_archiver|Tomato Bot"
-
-        maybe_spider = bool(re.search(regex, user_agent))
+        maybe_spider = web.maybe_spider(request)
         if maybe_spider:
             return HttpResponse("You're not welcome.", status=status.HTTP_403_FORBIDDEN)
         else:
