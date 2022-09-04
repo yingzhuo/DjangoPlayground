@@ -91,7 +91,6 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 2621440
 MEDIA_ROOT = '/Users/yingzhuo/Downloads/临时文件/'
 MEDIA_URL = 'https://nginx-static.yingzhuo.com/'
 
-
 ROOT_URLCONF = 'settings.urls'
 
 # 页面模板

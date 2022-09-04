@@ -22,7 +22,7 @@ class User(models.Model):
     password = models.CharField(max_length=2048, null=False, blank=False)
     email = models.CharField(max_length=100, null=True)
     roles = models.CharField(max_length=200, null=True, db_column='role_list')
-    gender = models.CharField(choices=Gender.choices(), max_length=10, null=True, db_column='sex')
+    gender = models.IntegerField(choices=Gender.tuple_list(), null=True, db_column='gender')
     dob = models.DateField(null=True, db_column='date_of_birth')
 
     @property
@@ -37,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
     """
     用户类通用序列化器
     """
-    # gender_value = serializers.IntegerField(source='get_gender_display')
+    gender = serializers.CharField(source='get_gender_display')
     dob = serializers.DateField(format='%Y-%m-%d', required=False)
     role_list = serializers.ListField()
 

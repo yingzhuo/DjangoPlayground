@@ -12,7 +12,6 @@ from rest_framework import serializers
 
 
 class CommonFileUploadForm(serializers.Serializer):
-
     # 文件名
     filename = serializers.CharField(
         error_messages={

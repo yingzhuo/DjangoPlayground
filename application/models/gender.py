@@ -13,7 +13,7 @@ from enum import Enum
 from django_sugar import lang
 
 
-class Gender(lang.ChoicesType, Enum):
+class Gender(lang.EnumMixin, Enum):
     """
     性别
     """

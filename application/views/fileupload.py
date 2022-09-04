@@ -8,14 +8,19 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
-from django.core.files import storage
+from django_sugar import web
 from rest_framework import views, parsers
 from rest_framework.response import Response
 
 from application.views.fileupload_form import CommonFileUploadForm
 
+# 文件存储
+FILE_STORAGE = web.SmartFileSystemFileStorage()
+
 
 class FileUploadView(views.APIView):
+    authentication_classes = []
+    permission_classes = []
     parser_classes = [parsers.MultiPartParser]
 
     def post(self, request, *args, **kwargs):
@@ -25,9 +30,8 @@ class FileUploadView(views.APIView):
         filename = form.validated_data['filename']
         file = form.validated_data['file_data']
 
-        fs = storage.FileSystemStorage()
-        save_file_name = fs.save(filename, file)
+        path = FILE_STORAGE.save(filename, file)
 
-        print(save_file_name)
-
-        return Response()
+        return Response({
+            'path': path
+        })
