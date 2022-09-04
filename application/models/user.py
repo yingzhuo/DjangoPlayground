@@ -38,7 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
     用户类通用序列化器
     """
     gender = serializers.CharField(source='get_gender_display')
-    dob = serializers.DateField(format='%Y-%m-%d', required=False)
+    dob = serializers.DateField(format='%F', required=False)
     role_list = serializers.ListField()
 
     class Meta:

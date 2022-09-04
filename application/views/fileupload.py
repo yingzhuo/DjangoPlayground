@@ -8,14 +8,15 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
-from django_sugar import web
+import datetime
+
+from django.utils import timezone
 from rest_framework import views, parsers
 from rest_framework.response import Response
 
+from application.models import FileMeta, FileMetaSerializer
 from application.views.fileupload_form import CommonFileUploadForm
-
-# 文件存储
-FILE_STORAGE = web.SmartFileSystemFileStorage()
+from common import constants
 
 
 class FileUploadView(views.APIView):
@@ -24,14 +25,23 @@ class FileUploadView(views.APIView):
     parser_classes = [parsers.MultiPartParser]
 
     def post(self, request, *args, **kwargs):
+        # current_user_id = request.user['id']
+
         form = CommonFileUploadForm(data=request.data)
         form.is_valid(raise_exception=True)
 
+        fs = constants.DEFAULT_FILE_STORAGE
         filename = form.validated_data['filename']
         file = form.validated_data['file_data']
 
-        path = FILE_STORAGE.save(filename, file)
+        # 文件保存到本地
+        path = fs.save(filename, file)
 
-        return Response({
-            'path': path
-        })
+        filemeta = FileMeta()
+        filemeta.path = path
+        filemeta.created_date = timezone.now()
+        filemeta.created_user_id = -1
+        filemeta.save()
+
+        ser = FileMetaSerializer(instance=filemeta, many=False)
+        return Response(data=ser.data)

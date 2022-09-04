@@ -8,6 +8,7 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
-from .filemeta import *
-from .gender import Gender
-from .user import User
+from django_sugar import web
+
+# 文件存储部件
+DEFAULT_FILE_STORAGE = web.SmartFileSystemFileStorage()
