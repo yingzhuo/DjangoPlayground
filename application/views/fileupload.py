@@ -8,8 +8,6 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
-import datetime
-
 from django.utils import timezone
 from rest_framework import views, parsers
 from rest_framework.response import Response
