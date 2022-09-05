@@ -18,8 +18,6 @@ from common import constants, security
 
 
 class FileUploadView(views.APIView):
-    authentication_classes = []
-    permission_classes = []
     parser_classes = [parsers.MultiPartParser]
 
     def post(self, request, *args, **kwargs):
