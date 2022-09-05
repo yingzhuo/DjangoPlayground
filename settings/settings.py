@@ -85,7 +85,7 @@ MIDDLEWARE = [
 # 日志
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
         'simple': {
             'format': '%(asctime)s|%(levelname)s - %(message)s',
@@ -100,15 +100,15 @@ LOGGING = {
             'formatter': 'verbose',
         }
     },
+    'root': {
+        'level': 'DEBUG',
+        'handlers': ['stdout'],
+    },
     'loggers': {
-        '': {
+        'django': {
             'level': 'WARNING',
             'handlers': ['stdout'],
-        }
-    },
-    'root': {
-        'handlers': ['stdout'],
-        'level': 'DEBUG',
+        },
     },
 }
 

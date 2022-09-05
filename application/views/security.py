@@ -41,15 +41,17 @@ class LoginView(APIView, web.JwtTokenGenerator, web.DelegatingPasswordEncoder):
         username = client_data['username']
         raw_pass = client_data['password']
 
-        logging.info("username: %s" % username)
-        logging.info("password: %s" % raw_pass)
+        logging.debug("username: %s" % username)
+        logging.debug("password: %s" % raw_pass)
 
         user = UserDao.find_by_username(username)
 
         if user is None:
+            logging.debug('用户名"%s"不存在' % username)
             raise exception.BE_LOGIN_FAILED
 
         if not self.password_matches(raw_pass, user.password):
+            logging.debug('密码错误')
             raise exception.BE_LOGIN_FAILED
 
         jwt_token = self.generate_token(user)
