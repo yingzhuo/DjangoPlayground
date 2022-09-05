@@ -18,7 +18,7 @@ from rest_framework.views import APIView
 from application.dao.user import UserDao
 from application.views.security_form import LoginForm
 from application.views.security_vo import UserWithTokenSerializer, UserWithToken
-from common import security, exception, misc
+from common import security, exception
 
 
 class LoginView(APIView, web.JwtTokenGenerator, web.DelegatingPasswordEncoder):
@@ -36,7 +36,7 @@ class LoginView(APIView, web.JwtTokenGenerator, web.DelegatingPasswordEncoder):
     jwt_algorithm_and_key = security.JWT_SECRET_KEY
 
     def post(self, request, *args, **kwargs):
-        client_data = misc.bind_request_data(request, LoginForm)
+        client_data = web.bind_request_data(request, LoginForm)
         username = client_data['username']
         raw_pass = client_data['password']
 
@@ -50,8 +50,11 @@ class LoginView(APIView, web.JwtTokenGenerator, web.DelegatingPasswordEncoder):
 
         jwt_token = self.generate_token(user)
 
-        uts = UserWithTokenSerializer(instance=UserWithToken(user=user, token=jwt_token))
-        return Response(data=uts.data)
+        return web.serialize_data_to_response(
+            UserWithToken(user=user, token=jwt_token),
+            UserWithTokenSerializer,
+            many=False,
+        )
 
     def user_to_jwt_payload(self, user) -> Optional[Dict[str, Any]]:
         return {
