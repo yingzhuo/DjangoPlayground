@@ -8,6 +8,8 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
+import logging
+
 from django.http import HttpResponse
 from django.utils import deprecation
 from django_sugar import web
@@ -29,42 +31,13 @@ class SpiderDenyingMiddleware(deprecation.MiddlewareMixin):
 
 class LoggingMiddleware(deprecation.MiddlewareMixin):
     """
-    抽象请求日志记录中间件
+    请求日志记录中间件
     """
 
     def process_request(self, request):
-        if self.__getattribute__('do_log'):
-            do_log = self.__getattribute__('do_log')
-            do_log(web.HttpRequestDescriptor(request))
-
+        descriptor = web.HttpRequestDescriptor(request)
+        logging.debug('-' * 120)
+        for msg in descriptor.get_detail():
+            logging.debug(msg)
+        logging.debug('-' * 120)
         return self.get_response(request)
-
-
-# ----------------------------------------------------------------------------------------------------------------------
-
-
-class StdoutLoggingMixin(object):
-    """
-    标准控制台请求日志特质
-    """
-
-    def do_log(self, request_descriptor):
-
-        if request_descriptor is None:
-            return
-
-        if not isinstance(request_descriptor, web.HttpRequestDescriptor):
-            raise TypeError('wrong type')
-
-        print('-' * 120)
-        print(request_descriptor)
-        print('-' * 120)
-
-
-class StdoutLoggingMiddleware(StdoutLoggingMixin, LoggingMiddleware, ):
-    """
-    请求日志记录中间件
-
-    此中间件输出日志到标准控制台
-    """
-    pass

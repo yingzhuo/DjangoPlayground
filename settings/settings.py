@@ -72,7 +72,7 @@ REST_FRAMEWORK = {
 # 中间件
 MIDDLEWARE = [
     'common.middleware.SpiderDenyingMiddleware',
-    'common.middleware.StdoutLoggingMiddleware',
+    'common.middleware.LoggingMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -81,6 +81,36 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# 日志
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'simple': {
+            'format': '%(asctime)s|%(levelname)s - %(message)s',
+        },
+        'verbose': {
+            'format': '%(asctime)s|%(levelname)s - %(name)s.%(funcName)s:%(lineno)s- %(message)s',
+        },
+    },
+    'handlers': {
+        'stdout': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        }
+    },
+    'loggers': {
+        '': {
+            'level': 'WARNING',
+            'handlers': ['stdout'],
+        }
+    },
+    'root': {
+        'handlers': ['stdout'],
+        'level': 'DEBUG',
+    },
+}
 
 # 文件上传相关
 FILE_UPLOAD_HANDLERS = [

@@ -8,6 +8,7 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
+import logging
 from datetime import datetime, timezone, timedelta
 from typing import Optional, Dict, Any
 
@@ -39,6 +40,9 @@ class LoginView(APIView, web.JwtTokenGenerator, web.DelegatingPasswordEncoder):
         client_data = web.bind_request_data(request, LoginForm)
         username = client_data['username']
         raw_pass = client_data['password']
+
+        logging.info("username: %s" % username)
+        logging.info("password: %s" % raw_pass)
 
         user = UserDao.find_by_username(username)
 
