@@ -34,7 +34,7 @@ class LoginView(APIView, web.JwtTokenGenerator, web.DelegatingPasswordEncoder):
     permission_classes = []
 
     # JWT加密key
-    jwt_algorithm_and_key = security.JWT_SECRET_KEY
+    jwt_sign_component = security.JWT_SECRET_KEY
 
     def post(self, request, *args, **kwargs):
         client_data = web.bind_request_data(request, LoginForm)

@@ -57,10 +57,10 @@ ntCsXqdl6ec9oQv8i3D3sDtAL3rpY3f7dyduNhaYMRqdltkleZZ3aa2XuJsXnRHz
 -----END RSA PRIVATE KEY-----
 """
 
-JWT_SECRET_KEY = web.create_rs384_algorithm(
-    public_key=_RSA_PUBLIC_KEY,
-    private_key=_RSA_PRIVATE_KEY,
-    passphrase=b'DjangoPlayground',
+JWT_SECRET_KEY = web.JsonWebTokenSignatureComponent.ps384(
+    _RSA_PUBLIC_KEY,
+    _RSA_PRIVATE_KEY,
+    'DjangoPlayground',
 )
 
 
@@ -91,7 +91,7 @@ class TokenBasedAuthenticator(web.TokenBasedAuthenticator,
                               web.CompositeTokenResolver,
                               web.JwtTokenBasedUserFinder):
     # JWT加密key
-    jwt_algorithm_and_key = JWT_SECRET_KEY
+    jwt_sign_component = JWT_SECRET_KEY
 
     @staticmethod
     def convert_user(user_dict):
