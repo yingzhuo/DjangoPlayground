@@ -8,8 +8,6 @@ r"""
 
     https://github.com/yingzhuo/DjangoPlayground
 """
-
-# namespace
 from django.urls import re_path
 
 from application.views.django import DjangoVersionView
@@ -17,6 +15,7 @@ from application.views.fileupload import FileUploadView
 from application.views.security import LoginView, TokenInfoView
 from application.views.user import FindUserByIdView
 
+# namespace
 app_name = 'application'
 
 # url映射
