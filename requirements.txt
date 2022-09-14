@@ -1,8 +1,8 @@
 asgiref==3.5.2
 cffi==1.15.1
-cryptography==37.0.4
-Django==4.1
-django-sugar @ git+https://github.com/yingzhuo/django-sugar.git@49d0c90b683414615d3265da3fd5ec87b74143ae
+cryptography==38.0.1
+Django==4.1.1
+django-sugar @ git+https://github.com/yingzhuo/django-sugar.git@1136410a48aaaecaac3f92ef0ce951b88a0d6a09
 djangorestframework==3.13.1
 pycparser==2.21
 PyJWT==2.4.0
